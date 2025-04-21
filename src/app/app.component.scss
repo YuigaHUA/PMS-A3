@@ -1,0 +1,29 @@
+/* 全局样式重置 */
+ion-app {
+    /* 修复iOS点击延迟问题 */
+    touch-action: manipulation;
+    
+    /* 全局字体设置 */
+    font-family: -apple-system, BlinkMacSystemFont, 
+                 "Segoe UI", Roboto, Helvetica, 
+                 Arial, sans-serif;
+  }
+  
+  /* 全局加载样式 */
+  ion-loading {
+    --background: rgba(0, 0, 0, 0.8);
+    --spinner-color: var(--ion-color-primary);
+    
+    .loading-wrapper {
+      border-radius: 12px;
+      padding: 24px;
+    }
+  }
+  
+  /* 适配暗黑模式 */
+  @media (prefers-color-scheme: dark) {
+    ion-app {
+      --ion-background-color: #121212;
+      --ion-text-color: #ffffff;
+    }
+  }

@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ currentItem?.name || '加载中...' }}</ion-title>
+    <ion-buttons slot="end">
+      <!-- 编辑按钮 -->
+      <ion-button *ngIf="!isEditing" (click)="toggleEdit()">
+        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+      </ion-button>
+      <!-- 帮助按钮 -->
+      <ion-button (click)="showHelp()">
+        <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- 加载状态 -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
+  <!-- 编辑表单 -->
+  <form *ngIf="currentItem && !isLoading" [formGroup]="editForm" (ngSubmit)="onSubmit()" class="form-container">
+    <ion-list lines="full">
+      <ion-item>
+        <ion-label position="stacked">项目名称</ion-label>
+        <ion-input formControlName="name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">类别</ion-label>
+        <ion-select formControlName="category" interface="action-sheet">
+          <ion-select-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">数量</ion-label>
+        <ion-input formControlName="quantity" type="number"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="f.quantity.invalid && (f.quantity.dirty || f.quantity.touched)">
+        请输入有效数量 (1-9999)
+      </ion-note>
+
+      <ion-item>
+        <ion-label position="stacked">价格</ion-label>
+        <ion-input formControlName="price" type="number" step="0.01"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="f.price.invalid && (f.price.dirty || f.price.touched)">
+        请输入有效价格 (>0)
+      </ion-note>
+
+      <ion-item>
+        <ion-label position="stacked">供应商</ion-label>
+        <ion-input formControlName="supplierName"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">状态</ion-label>
+        <ion-select formControlName="status" interface="action-sheet">
+          <ion-select-option *ngFor="let status of statusOptions" [value]="status">{{ status }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">是否推荐</ion-label>
+        <ion-toggle formControlName="featured"></ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">备注</ion-label>
+        <ion-textarea formControlName="specialNotes"></ion-textarea>
+      </ion-item>
+
+      <ion-footer>
+        <ion-button expand="block" color="success" type="submit" [disabled]="editForm.invalid">保存</ion-button>
+        <ion-button expand="block" color="danger" (click)="onDelete()">删除</ion-button>
+      </ion-footer>
+    </ion-list>
+  </form>
+</ion-content>

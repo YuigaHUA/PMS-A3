@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>库存管理</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="showHelp()">
+        <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- 搜索栏 -->
+  <ion-searchbar
+    [(ngModel)]="searchTerm"
+    (ionChange)="searchItems()"
+    placeholder="搜索项目、类别或供应商..."
+    animated
+    debounce="300">
+  </ion-searchbar>
+
+  <!-- 库存列表 -->
+  <ion-list lines="full">
+    <ion-item 
+      *ngFor="let item of displayedItems" 
+      [routerLink]="['/', 'tabs', 'tab3', item.name]"
+      detail>
+      <ion-label class="ion-text-wrap">
+        <h2>{{ item.name }}</h2>
+        <p>
+          <ion-badge [color]="getStatusColor(item.status)">{{ item.status }}</ion-badge>
+          <ion-badge color="medium">{{ item.category }}</ion-badge>
+        </p>
+        <p>数量: {{ item.quantity }} | 价格: ${{ item.price | number:'1.2-2' }}</p>
+        <p *ngIf="item.supplierName">供应商: {{ item.supplierName }}</p>
+      </ion-label>
+      
+      <ion-note slot="end" *ngIf="item.featured > 0">
+        <ion-icon name="star" color="warning"></ion-icon>
+      </ion-note>
+    </ion-item>
+  </ion-list>
+
+  <!-- 空状态提示 -->
+  <ion-grid *ngIf="displayedItems.length === 0 && !isLoading" class="ion-padding">
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-md="8" class="ion-text-center">
+        <ion-icon name="cube-outline" size="large"></ion-icon>
+        <h3>{{ searchTerm ? '没有找到匹配的项目' : '库存为空' }}</h3>
+        <p *ngIf="!searchTerm">点击下方按钮添加新项目</p>
+        <ion-button *ngIf="!searchTerm" fill="outline" routerLink="/tabs/tab2">
+          添加新项目
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- 加载指示器 -->
+  <ion-spinner *ngIf="isLoading" name="crescent" class="center-spinner"></ion-spinner>
+</ion-content>
