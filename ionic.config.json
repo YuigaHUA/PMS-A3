@@ -1,0 +1,7 @@
+{
+  "name": "inventory-management-ionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
